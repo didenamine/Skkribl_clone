@@ -1,4 +1,4 @@
-syspara
-.env 
-__pycache__
-
+APP_FLOW.md
+.env
+syspara/
+paycache/
