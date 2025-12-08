@@ -1,12 +1,13 @@
-import tkinter as tk
-from tkinter import simpledialog, messagebox, colorchooser
 import sys
 import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import tkinter as tk
+from tkinter import simpledialog, messagebox, colorchooser
 import queue
 import config
 import protocol
 from client.network import GameClient
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 class PictionaryUI:
@@ -26,16 +27,19 @@ class PictionaryUI:
         self.root.geometry("1000x700")
         self.root.configure(bg="#e0e0e0")
 
-        # Ask for name
+        # Ask for name 
+        """pop up UI to ask about the name ; i ll make into the main frame later TODO , for now  i ll stick with this approach """
         self.name = simpledialog.askstring("Name", "Enter your name:")
         if not self.name: self.name = "Guest"
         
         if not self.client.connect(self.name):
+            ####POPup when the server isn't listening to client or the server is closed .. 
             messagebox.showerror("Error", "Could not connect to server")
             self.root.destroy()
             return
 
         self.setup_ui()
+        #after each 100ms will process the messages queue 
         self.root.after(100, self.process_queue)
         self.root.mainloop()
 
@@ -99,16 +103,16 @@ class PictionaryUI:
         self.clear_btn.pack(side=tk.RIGHT, padx=10)
 
         self.update_controls(False)
-
+#This function is used to update the controls based on the current state of the game
     def update_controls(self, is_drawer):
         state = tk.NORMAL if is_drawer else tk.DISABLED
         self.color_btn.config(state=state)
         self.size_scale.config(state=state)
         self.clear_btn.config(state=state)
-
+#producer
     def handle_message(self, msg_string):
         self.msg_queue.put(msg_string)
-
+#consumer
     def process_queue(self):
         while not self.msg_queue.empty():
             msg = self.msg_queue.get()

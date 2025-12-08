@@ -4,9 +4,9 @@ import random
 import time
 import sys
 import os
-import config
-import protocol
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+import config
+import protocol 
 
 class ServerCore:
     def __init__(self, log_callback=None, update_count_callback=None):
@@ -38,6 +38,7 @@ class ServerCore:
         
         # Callbacks for UI
         self.log_callback = log_callback
+        #this callback is used to update the player count in the main frame
         self.update_count_callback = update_count_callback
 
     def log(self, msg):
